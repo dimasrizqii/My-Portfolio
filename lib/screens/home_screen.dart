@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _contactKey = GlobalKey();
 
   String _activeSection = 'Home';
+  bool _showScrollToTop = false;
 
   @override
   void initState() {
@@ -39,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onScroll() {
     final scrollPosition = _scrollController.position.pixels;
-    final heroPosition = _getPosition(_heroKey);
     final aboutPosition = _getPosition(_aboutKey);
     final skillsPosition = _getPosition(_skillsKey);
     final projectsPosition = _getPosition(_projectsKey);
@@ -57,9 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
       newSection = 'About';
     }
 
-    if (newSection != _activeSection) {
+    // Show scroll-to-top button when scrolled past hero section
+    final shouldShowButton = scrollPosition > 400;
+
+    if (newSection != _activeSection || shouldShowButton != _showScrollToTop) {
       setState(() {
         _activeSection = newSection;
+        _showScrollToTop = shouldShowButton;
       });
     }
   }
@@ -89,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: HeroSection(
                     onContactPressed: () => _scrollToSection(_contactKey),
                     onProjectsPressed: () => _scrollToSection(_projectsKey),
+                    onScrollDown: () => _scrollToSection(_aboutKey),
                   ),
                 ),
 
@@ -136,6 +141,63 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+
+          // Scroll to Previous/Top Button (shows when scrolled down)
+          if (_showScrollToTop)
+            Positioned(
+              bottom: 100, // Upper position
+              right: 32,
+              child: AnimatedOpacity(
+                opacity: _showScrollToTop ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: _ScrollToTopButton(
+                  onTap: () {
+                    // Smart navigation: go to previous section
+                    if (_activeSection == 'Skills') {
+                      _scrollToSection(_aboutKey); // Skills → About
+                    } else if (_activeSection == 'Projects') {
+                      _scrollToSection(_skillsKey); // Projects → Skills
+                    } else if (_activeSection == 'Contact') {
+                      _scrollToSection(_projectsKey); // Contact → Projects
+                    } else {
+                      // About or Home → scroll to top
+                      _scrollController.animateTo(
+                        0,
+                        duration: const Duration(milliseconds: 1000),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+
+          // Scroll to Next Section Button (shows in About, Skills, Projects)
+          if (_activeSection == 'About' ||
+              _activeSection == 'Skills' ||
+              _activeSection == 'Projects')
+            Positioned(
+              bottom: 32, // Lower position (below up button)
+              right: 32,
+              child: AnimatedOpacity(
+                opacity: 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: _ScrollToNextButton(
+                  onTap: () {
+                    // Determine next section based on current
+                    GlobalKey nextKey;
+                    if (_activeSection == 'About') {
+                      nextKey = _skillsKey;
+                    } else if (_activeSection == 'Skills') {
+                      nextKey = _projectsKey;
+                    } else {
+                      nextKey = _contactKey; // Projects → Contact
+                    }
+                    _scrollToSection(nextKey);
+                  },
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -151,5 +213,115 @@ class _HomeScreenState extends State<HomeScreen> {
         alignment: 0.0, // Scroll to top of section
       );
     }
+  }
+}
+
+class _ScrollToTopButton extends StatefulWidget {
+  final VoidCallback onTap;
+
+  const _ScrollToTopButton({required this.onTap});
+
+  @override
+  State<_ScrollToTopButton> createState() => _ScrollToTopButtonState();
+}
+
+class _ScrollToTopButtonState extends State<_ScrollToTopButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: _isHovered
+                ? AppColors.primaryGradient
+                : LinearGradient(
+                    colors: [
+                      AppColors.accentCyan.withOpacity(0.8),
+                      AppColors.accentPurple.withOpacity(0.8),
+                    ],
+                  ),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: _isHovered
+                    ? AppColors.accentCyan.withOpacity(0.5)
+                    : AppColors.accentCyan.withOpacity(0.3),
+                blurRadius: _isHovered ? 20 : 15,
+                spreadRadius: _isHovered ? 3 : 2,
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.keyboard_arrow_up,
+            color: AppColors.textPrimary,
+            size: _isHovered ? 32 : 28,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ScrollToNextButton extends StatefulWidget {
+  final VoidCallback onTap;
+
+  const _ScrollToNextButton({required this.onTap});
+
+  @override
+  State<_ScrollToNextButton> createState() => _ScrollToNextButtonState();
+}
+
+class _ScrollToNextButtonState extends State<_ScrollToNextButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: _isHovered
+                ? AppColors.primaryGradient
+                : LinearGradient(
+                    colors: [
+                      AppColors.accentPurple.withOpacity(0.8),
+                      AppColors.accentCyan.withOpacity(0.8),
+                    ],
+                  ),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: _isHovered
+                    ? AppColors.accentPurple.withOpacity(0.5)
+                    : AppColors.accentPurple.withOpacity(0.3),
+                blurRadius: _isHovered ? 20 : 15,
+                spreadRadius: _isHovered ? 3 : 2,
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.textPrimary,
+            size: _isHovered ? 32 : 28,
+          ),
+        ),
+      ),
+    );
   }
 }

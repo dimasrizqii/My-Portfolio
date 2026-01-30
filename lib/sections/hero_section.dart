@@ -8,11 +8,13 @@ import '../widgets/custom_button.dart';
 class HeroSection extends StatelessWidget {
   final VoidCallback onContactPressed;
   final VoidCallback onProjectsPressed;
+  final VoidCallback onScrollDown;
 
   const HeroSection({
     super.key,
     required this.onContactPressed,
     required this.onProjectsPressed,
+    required this.onScrollDown,
   });
 
   @override
@@ -21,16 +23,15 @@ class HeroSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      // Add padding top to avoid header overlap
-      padding: const EdgeInsets.only(top: 80),
-      constraints: BoxConstraints(minHeight: Responsive.height(context) - 80),
+      // Exact height = full viewport
+      height: Responsive.height(context),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [
             AppColors.bgDark,
-            AppColors.bgCard.withOpacity(0.5),
+            AppColors.bgCard.withOpacity(0.3),
             AppColors.bgDark,
           ],
         ),
@@ -79,13 +80,17 @@ class HeroSection extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: Responsive.getMaxWidth(context),
               ),
-              padding: EdgeInsets.symmetric(
-                horizontal: Responsive.spacing(context, 40),
-                vertical: 60,
+              padding: EdgeInsets.only(
+                left: Responsive.spacing(context, 40),
+                right: Responsive.spacing(context, 40),
+                top: 100, // Space for header
+                bottom: 60,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 40),
                   // Greeting with Icon instead of emoji
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -202,36 +207,42 @@ class HeroSection extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 80),
 
-                  // Scroll Indicator
-                  Column(
-                    children: [
-                      const Text(
-                        "Scroll to explore",
-                        style: TextStyle(
-                          color: AppColors.textTertiary,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TweenAnimationBuilder(
-                        tween: Tween<double>(begin: 0, end: 10),
-                        duration: const Duration(milliseconds: 800),
-                        curve: Curves.easeInOut,
-                        builder: (context, double value, child) {
-                          return Transform.translate(
-                            offset: Offset(0, value),
-                            child: const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.accentCyan,
-                              size: 32,
+                  // Clickable Scroll Indicator
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: onScrollDown,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Scroll to explore",
+                            style: TextStyle(
+                              color: AppColors.textTertiary,
+                              fontSize: 14,
                             ),
-                          );
-                        },
-                        onEnd: () {},
+                          ),
+                          const SizedBox(height: 8),
+                          TweenAnimationBuilder(
+                            tween: Tween<double>(begin: 0, end: 10),
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                            builder: (context, double value, child) {
+                              return Transform.translate(
+                                offset: Offset(0, value),
+                                child: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: AppColors.accentCyan,
+                                  size: 32,
+                                ),
+                              );
+                            },
+                            onEnd: () {},
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),

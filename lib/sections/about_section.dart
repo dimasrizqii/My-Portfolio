@@ -212,7 +212,7 @@ class AboutSection extends StatelessWidget {
           context,
           icon: Icons.emoji_events,
           value: PortfolioData.experience,
-          label: "Experience",
+          label: "Current Role",
           gradient: LinearGradient(
             colors: [
               AppColors.accentPink.withOpacity(0.2),

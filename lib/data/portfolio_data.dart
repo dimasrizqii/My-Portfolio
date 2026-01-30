@@ -8,13 +8,15 @@ class PortfolioData {
   static const String subtitle = "Flutter & Kotlin Enthusiast";
 
   static const String bio =
+      "Currently working as an IT Facilitator at PKBM ABhome. "
       "Fresh Graduate from Universitas Pembangunan Nasional \"Veteran\" Jawa Timur. "
       "Passionate about creating beautiful and functional mobile applications with Flutter and Kotlin. "
       "Always eager to learn new technologies and contribute to meaningful projects.";
 
   static const String location = "Surabaya, Indonesia";
-  static const String education = "UPN Veteran Jawa Timur";
-  static const String status = "Actively looking for opportunities";
+  static const String education =
+      "Universitas Pembangunan Nasional \"Veteran\" Jawa Timur";
+  static const String status = "Open to new opportunities";
 
   // Contact Info
   static const String email = "dimas7rizqi@gmail.com"; // Update with real email
@@ -24,8 +26,8 @@ class PortfolioData {
 
   // Quick Stats
   static const int projectsCount = 36;
-  static const int skillsCount = 15;
-  static const String experience = "Fresh Graduate";
+  static const int skillsCount = 19;
+  static const String experience = "IT Facilitator at PKBM ABhome";
 
   // Typing Animation Texts
   static const List<String> typingTexts = [
@@ -50,23 +52,26 @@ class PortfolioSkills {
     Skill(name: "Kotlin", icon: FontAwesomeIcons.laptop, category: "Mobile"),
     Skill(name: "Android", icon: FontAwesomeIcons.android, category: "Mobile"),
     // Frontend
-    Skill(
-      name: "HTML/CSS",
-      icon: FontAwesomeIcons.paintbrush,
-      category: "Frontend",
-    ),
+    Skill(name: "HTML/CSS", icon: FontAwesomeIcons.html5, category: "Frontend"),
     Skill(name: "JavaScript", icon: FontAwesomeIcons.js, category: "Frontend"),
     // Tools & Others
     Skill(name: "Git", icon: FontAwesomeIcons.gitAlt, category: "Tools"),
     Skill(name: "GitHub", icon: FontAwesomeIcons.github, category: "Tools"),
     Skill(name: "Postman", icon: FontAwesomeIcons.rocket, category: "Tools"),
+    Skill(name: "Figma", icon: FontAwesomeIcons.figma, category: "Tools"),
+    Skill(name: "AI Agent", icon: FontAwesomeIcons.robot, category: "Tools"),
     Skill(name: "Firebase", icon: FontAwesomeIcons.fire, category: "Backend"),
     Skill(name: "REST API", icon: FontAwesomeIcons.server, category: "Backend"),
+    Skill(
+      name: "Laravel",
+      icon: FontAwesomeIcons.database,
+      category: "Backend",
+    ),
     // Soft Skills
     Skill(
       name: "UI Implementation",
       icon: FontAwesomeIcons.palette,
-      category: "Design",
+      category: "Soft Skills",
     ),
     Skill(
       name: "Problem Solving",
@@ -76,6 +81,11 @@ class PortfolioSkills {
     Skill(
       name: "Team Work",
       icon: FontAwesomeIcons.peopleGroup,
+      category: "Soft Skills",
+    ),
+    Skill(
+      name: "Communications",
+      icon: FontAwesomeIcons.message,
       category: "Soft Skills",
     ),
   ];

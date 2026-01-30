@@ -3,6 +3,7 @@ import '../utils/app_colors.dart';
 import '../utils/responsive.dart';
 
 class HeaderBar extends StatelessWidget {
+  final String activeSection;
   final VoidCallback onHomeTap;
   final VoidCallback onAboutTap;
   final VoidCallback onSkillsTap;
@@ -11,6 +12,7 @@ class HeaderBar extends StatelessWidget {
 
   const HeaderBar({
     super.key,
+    required this.activeSection,
     required this.onHomeTap,
     required this.onAboutTap,
     required this.onSkillsTap,
@@ -67,13 +69,35 @@ class HeaderBar extends StatelessWidget {
           if (!isMobile)
             Row(
               children: [
-                _HeaderNavButton(label: "About", onTap: onAboutTap),
+                _HeaderNavButton(
+                  label: "Home",
+                  onTap: onHomeTap,
+                  isActive: activeSection == 'Home',
+                ),
                 const SizedBox(width: 8),
-                _HeaderNavButton(label: "Skills", onTap: onSkillsTap),
+                _HeaderNavButton(
+                  label: "About",
+                  onTap: onAboutTap,
+                  isActive: activeSection == 'About',
+                ),
                 const SizedBox(width: 8),
-                _HeaderNavButton(label: "Projects", onTap: onProjectsTap),
+                _HeaderNavButton(
+                  label: "Skills",
+                  onTap: onSkillsTap,
+                  isActive: activeSection == 'Skills',
+                ),
                 const SizedBox(width: 8),
-                _HeaderNavButton(label: "Contact", onTap: onContactTap),
+                _HeaderNavButton(
+                  label: "Projects",
+                  onTap: onProjectsTap,
+                  isActive: activeSection == 'Projects',
+                ),
+                const SizedBox(width: 8),
+                _HeaderNavButton(
+                  label: "Contact",
+                  onTap: onContactTap,
+                  isActive: activeSection == 'Contact',
+                ),
               ],
             ),
         ],
@@ -85,8 +109,13 @@ class HeaderBar extends StatelessWidget {
 class _HeaderNavButton extends StatefulWidget {
   final String label;
   final VoidCallback onTap;
+  final bool isActive;
 
-  const _HeaderNavButton({required this.label, required this.onTap});
+  const _HeaderNavButton({
+    required this.label,
+    required this.onTap,
+    this.isActive = false,
+  });
 
   @override
   State<_HeaderNavButton> createState() => _HeaderNavButtonState();
@@ -97,6 +126,8 @@ class _HeaderNavButtonState extends State<_HeaderNavButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isActiveOrHovered = widget.isActive || _isHovered;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -106,19 +137,33 @@ class _HeaderNavButtonState extends State<_HeaderNavButton> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            gradient: _isHovered ? AppColors.primaryGradient : null,
-            color: _isHovered ? null : Colors.white.withOpacity(0.05),
+            gradient: isActiveOrHovered ? AppColors.primaryGradient : null,
+            color: isActiveOrHovered ? null : Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(8),
-            border: _isHovered
-                ? null
-                : Border.all(width: 1, color: Colors.white.withOpacity(0.1)),
+            border: Border.all(
+              width: widget.isActive ? 2 : 1,
+              color: widget.isActive
+                  ? AppColors.accentCyan
+                  : (_isHovered
+                        ? AppColors.accentCyan.withOpacity(0.5)
+                        : Colors.white.withOpacity(0.1)),
+            ),
+            boxShadow: widget.isActive
+                ? [
+                    BoxShadow(
+                      color: AppColors.accentCyan.withOpacity(0.4),
+                      blurRadius: 12,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
           ),
           child: Text(
             widget.label,
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 15,
-              fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
+              fontWeight: isActiveOrHovered ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
         ),

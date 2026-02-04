@@ -8,10 +8,11 @@ class PortfolioData {
   static const String subtitle = "Flutter & Kotlin Enthusiast";
 
   static const String bio =
-      "Currently working as an IT Facilitator at PKBM ABhome. "
-      "Fresh Graduate from Universitas Pembangunan Nasional \"Veteran\" Jawa Timur. "
-      "Passionate about creating beautiful and functional mobile applications with Flutter and Kotlin. "
-      "Always eager to learn new technologies and contribute to meaningful projects.";
+      "Mobile App Developer with expertise in Flutter and Kotlin/Android development. "
+      "Published researcher with AI-powered educational app (GuruGPT) achieving 83.4% TAM score in JITET journal. "
+      "Experienced in implementing modern architectures (Clean Architecture, MVVM, BLoC) and integrating AI technologies (OpenAI API) into mobile applications. "
+      "Currently serving as IT Facilitator at PKBM ABhome, helping bridge technology and education. "
+      "Fresh graduate from UPN \"Veteran\" Jawa Timur.";
 
   static const String location = "Surabaya, Indonesia";
   static const String education =
@@ -26,7 +27,7 @@ class PortfolioData {
 
   // Quick Stats
   static const int projectsCount = 36;
-  static const int skillsCount = 19;
+  static const int skillsCount = 28;
   static const String experience = "IT Facilitator at PKBM ABhome";
 
   // Typing Animation Texts
@@ -51,21 +52,66 @@ class PortfolioSkills {
     Skill(name: "Flutter", icon: FontAwesomeIcons.code, category: "Mobile"),
     Skill(name: "Kotlin", icon: FontAwesomeIcons.laptop, category: "Mobile"),
     Skill(name: "Android", icon: FontAwesomeIcons.android, category: "Mobile"),
+    // State Management
+    Skill(
+      name: "BLoC Pattern",
+      icon: FontAwesomeIcons.cube,
+      category: "State Management",
+    ),
+    Skill(
+      name: "Provider",
+      icon: FontAwesomeIcons.circleNodes,
+      category: "State Management",
+    ),
+    // Architecture
+    Skill(
+      name: "Clean Architecture",
+      icon: FontAwesomeIcons.diagramProject,
+      category: "Architecture",
+    ),
+    Skill(
+      name: "MVVM",
+      icon: FontAwesomeIcons.sitemap,
+      category: "Architecture",
+    ),
+    // AI Integration
+    Skill(
+      name: "OpenAI API",
+      icon: FontAwesomeIcons.brain,
+      category: "AI Integration",
+    ),
     // Frontend
     Skill(name: "HTML/CSS", icon: FontAwesomeIcons.html5, category: "Frontend"),
     Skill(name: "JavaScript", icon: FontAwesomeIcons.js, category: "Frontend"),
+    // Backend & Database
+    Skill(name: "Firebase", icon: FontAwesomeIcons.fire, category: "Backend"),
+    Skill(
+      name: "Cloud Firestore",
+      icon: FontAwesomeIcons.database,
+      category: "Backend",
+    ),
+    Skill(
+      name: "Firebase Auth",
+      icon: FontAwesomeIcons.userShield,
+      category: "Backend",
+    ),
+    Skill(name: "REST API", icon: FontAwesomeIcons.server, category: "Backend"),
+    Skill(name: "Laravel", icon: FontAwesomeIcons.code, category: "Backend"),
+    Skill(
+      name: "DataStore",
+      icon: FontAwesomeIcons.boxArchive,
+      category: "Backend",
+    ),
     // Tools & Others
     Skill(name: "Git", icon: FontAwesomeIcons.gitAlt, category: "Tools"),
     Skill(name: "GitHub", icon: FontAwesomeIcons.github, category: "Tools"),
     Skill(name: "Postman", icon: FontAwesomeIcons.rocket, category: "Tools"),
     Skill(name: "Figma", icon: FontAwesomeIcons.figma, category: "Tools"),
     Skill(name: "AI Agent", icon: FontAwesomeIcons.robot, category: "Tools"),
-    Skill(name: "Firebase", icon: FontAwesomeIcons.fire, category: "Backend"),
-    Skill(name: "REST API", icon: FontAwesomeIcons.server, category: "Backend"),
     Skill(
-      name: "Laravel",
-      icon: FontAwesomeIcons.database,
-      category: "Backend",
+      name: "Navigation Component",
+      icon: FontAwesomeIcons.route,
+      category: "Tools",
     ),
     // Soft Skills
     Skill(
@@ -110,45 +156,33 @@ class Project {
 class PortfolioProjects {
   static const List<Project> projects = [
     Project(
-      name: "Flutter Portfolio",
+      name: "GuruGPT",
       description:
-          "Personal portfolio website built with Flutter showcasing my projects and skills",
-      technologies: ["Flutter", "Dart", "Web"],
+          "AI-Powered Educational Discussion Topic Generator for middle school teachers using ChatGPT with Chain of Thought algorithm. Published research with 83.4% TAM score.",
+      technologies: [
+        "Kotlin",
+        "Android",
+        "OpenAI API",
+        "Firebase",
+        "Firestore",
+      ],
+      githubUrl: "https://github.com/GuruGPT/guru-gpt-mobile",
+    ),
+    Project(
+      name: "ShopApp",
+      description:
+          "E-commerce mobile application with product browsing, category filtering, shopping cart, and real-time synchronization using Clean Architecture and BLoC pattern.",
+      technologies: ["Flutter", "BLoC", "Firebase", "Fake Store API"],
       githubUrl:
-          "https://github.com/dimasrizqii/flutter_dimas-rizqi-ibadurrahim",
+          "https://github.com/dimasrizqii/Flutter-Learning/tree/main/Final%20Project/final_project",
     ),
     Project(
-      name: "Currency Converter",
+      name: "TMDB App",
       description:
-          "Web-based currency converter application with real-time exchange rates",
-      technologies: ["HTML", "CSS", "JavaScript"],
+          "Movie database application for browsing films, searching, and managing favorites with MVVM architecture, Google Sign-In, and infinite scroll pagination.",
+      technologies: ["Flutter", "Provider", "TMDB API", "Firebase"],
       githubUrl:
-          "https://github.com/dimasrizqii/Sistem-Konverter-Nilai-Mata-Uang",
-    ),
-    Project(
-      name: "Android Intent Demo",
-      description:
-          "Learning project demonstrating Android Intent mechanisms and navigation",
-      technologies: ["Kotlin", "Android"],
-      githubUrl: "https://github.com/dimasrizqii/belajarIntent",
-    ),
-    Project(
-      name: "Navigation Component",
-      description: "Android app showcasing Navigation Component implementation",
-      technologies: ["Kotlin", "Android", "Navigation"],
-      githubUrl: "https://github.com/dimasrizqii/CobaNavigationComponent",
-    ),
-    Project(
-      name: "Challenge Chapter 1",
-      description: "Kotlin programming challenges and exercises",
-      technologies: ["Kotlin"],
-      githubUrl: "https://github.com/dimasrizqii/challengeChapter1",
-    ),
-    Project(
-      name: "Challenge Chapter 2",
-      description: "Advanced Kotlin challenges focusing on Android development",
-      technologies: ["Kotlin", "Android"],
-      githubUrl: "https://github.com/dimasrizqii/challengeChapter2",
+          "https://github.com/dimasrizqii/mini-project-flutter_dimas-rizqi-ibadurrahim",
     ),
   ];
 }
@@ -174,14 +208,14 @@ class SocialLinks {
       icon: FontAwesomeIcons.linkedin,
     ),
     SocialLink(
+      name: "Instagram",
+      url: "https://www.instagram.com/dimasrizqii_/",
+      icon: FontAwesomeIcons.instagram,
+    ),
+    SocialLink(
       name: "Email",
       url: "mailto:dimas7rizqi@gmail.com",
       icon: FontAwesomeIcons.envelope,
-    ),
-    SocialLink(
-      name: "WhatsApp",
-      url: "https://wa.me/6281803613134", // Update with real number
-      icon: FontAwesomeIcons.whatsapp,
     ),
   ];
 }

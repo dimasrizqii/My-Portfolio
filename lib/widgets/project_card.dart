@@ -43,7 +43,7 @@ class _ProjectCardState extends State<ProjectCard> {
         duration: const Duration(milliseconds: 300),
         transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
         child: Container(
-          height: 280,
+          height: 320,
           decoration: BoxDecoration(
             gradient: AppColors.cardGradient,
             borderRadius: BorderRadius.circular(16),
@@ -101,7 +101,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             fontSize: 14,
                             height: 1.5,
                           ),
-                          maxLines: 3,
+                          maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

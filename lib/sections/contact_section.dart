@@ -26,58 +26,61 @@ class ContactSection extends StatelessWidget {
         horizontal: Responsive.spacing(context, 40),
         vertical: Responsive.spacing(context, 100),
       ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.bgDark, AppColors.bgCard.withOpacity(0.5)],
-        ),
-      ),
+      color: AppColors.bgDark,
       child: Center(
         child: Container(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.getMaxWidth(context),
-          ),
+          constraints: BoxConstraints(maxWidth: Responsive.getMaxWidth(context)),
           child: Column(
             children: [
               const SectionTitle(
-                title: "Let's Connect!",
-                subtitle: "Feel free to reach out",
+                title: "Get In Touch",
+                subtitle: "Contact",
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 48),
 
-              // Contact Message
+              // Message card
               Container(
-                padding: const EdgeInsets.all(32),
+                constraints: const BoxConstraints(maxWidth: 560),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 36,
+                ),
                 decoration: BoxDecoration(
-                  gradient: AppColors.cardGradient,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    width: 2,
-                    color: Colors.white.withOpacity(0.1),
-                  ),
+                  color: AppColors.bgCard,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.border, width: 1),
                 ),
                 child: Column(
                   children: [
                     Text(
-                      "I'm actively looking for opportunities as a Mobile Developer",
+                      "Open to opportunities",
                       style: TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: Responsive.fontSize(context, 20),
+                        color: AppColors.accent,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
+                        letterSpacing: 2.5,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      "I'm actively looking for new opportunities as a Mobile Developer",
+                      style: TextStyle(
+                        color: AppColors.textBright,
+                        fontSize: Responsive.fontSize(context, 18),
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                        letterSpacing: -0.3,
                       ),
                       textAlign: TextAlign.center,
                     ),
-
-                    const SizedBox(height: 16),
-
+                    const SizedBox(height: 14),
                     Text(
-                      "Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+                      "Whether you have a question or just want to say hi, my inbox is always open.",
                       style: TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: Responsive.fontSize(context, 16),
-                        height: 1.6,
+                        fontSize: Responsive.fontSize(context, 14),
+                        height: 1.7,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -85,12 +88,12 @@ class ContactSection extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 56),
 
-              // Social Links
+              // Social links
               Wrap(
-                spacing: 24,
-                runSpacing: 24,
+                spacing: 16,
+                runSpacing: 16,
                 alignment: WrapAlignment.center,
                 children: SocialLinks.links.map((social) {
                   return _SocialButton(
@@ -106,42 +109,35 @@ class ContactSection extends StatelessWidget {
               // Footer
               Column(
                 children: [
-                  Divider(color: Colors.white.withOpacity(0.1), thickness: 1),
-
-                  const SizedBox(height: 24),
-
+                  Container(
+                    height: 1,
+                    color: AppColors.border,
+                  ),
+                  const SizedBox(height: 28),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Made with ",
+                        "Built with Flutter",
                         style: TextStyle(
                           color: AppColors.textTertiary,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
+                      const SizedBox(width: 6),
                       Icon(
-                        Icons.favorite,
-                        color: AppColors.accentPink,
-                        size: 14,
-                      ),
-                      const Text(
-                        " using Flutter",
-                        style: TextStyle(
-                          color: AppColors.textTertiary,
-                          fontSize: 14,
-                        ),
+                        Icons.favorite_rounded,
+                        color: AppColors.accent.withValues(alpha: 0.7),
+                        size: 12,
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 8),
-
+                  const SizedBox(height: 6),
                   Text(
                     "© 2026 ${PortfolioData.name}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.textTertiary,
-                      fontSize: 14,
+                      fontSize: 13,
                     ),
                   ),
                 ],
@@ -175,44 +171,39 @@ class _SocialButtonState extends State<_SocialButton> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
-            gradient: _isHovered ? AppColors.primaryGradient : null,
-            color: _isHovered ? null : AppColors.bgCard,
-            borderRadius: BorderRadius.circular(12),
+            color: _isHovered
+                ? AppColors.accent.withValues(alpha: 0.10)
+                : AppColors.bgCard,
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              width: 2,
-              color: _isHovered
-                  ? Colors.transparent
-                  : Colors.white.withOpacity(0.1),
+              color: _isHovered ? AppColors.accent.withValues(alpha: 0.35) : AppColors.border,
+              width: 1,
             ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: AppColors.accentCyan.withOpacity(0.4),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                    ),
-                  ]
-                : null,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              FaIcon(widget.icon, color: AppColors.textPrimary, size: 24),
-              const SizedBox(width: 12),
+              FaIcon(
+                widget.icon,
+                color: _isHovered ? AppColors.accent : AppColors.textSecondary,
+                size: 16,
+              ),
+              const SizedBox(width: 10),
               Text(
                 widget.label,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: TextStyle(
+                  color: _isHovered ? AppColors.textPrimary : AppColors.textSecondary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],

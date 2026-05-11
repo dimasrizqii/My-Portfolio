@@ -20,19 +20,16 @@ class AboutSection extends StatelessWidget {
       color: AppColors.bgDark,
       child: Center(
         child: Container(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.getMaxWidth(context),
-          ),
+          constraints: BoxConstraints(maxWidth: Responsive.getMaxWidth(context)),
           child: Column(
             children: [
               const SectionTitle(
                 title: "About Me",
-                subtitle: "Get to know me better",
+                subtitle: "Who I Am",
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 64),
 
-              // Content
               isMobile
                   ? _buildMobileLayout(context)
                   : _buildDesktopLayout(context),
@@ -46,9 +43,9 @@ class AboutSection extends StatelessWidget {
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
       children: [
-        _buildInfoCards(context),
-        const SizedBox(height: 40),
         _buildBio(context),
+        const SizedBox(height: 40),
+        _buildStatCards(context),
       ],
     );
   }
@@ -57,9 +54,9 @@ class AboutSection extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(flex: 1, child: _buildBio(context)),
-        const SizedBox(width: 60),
-        Expanded(flex: 1, child: _buildInfoCards(context)),
+        Expanded(flex: 3, child: _buildBio(context)),
+        const SizedBox(width: 64),
+        Expanded(flex: 2, child: _buildStatCards(context)),
       ],
     );
   }
@@ -68,102 +65,68 @@ class AboutSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              "Hello! ",
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: Responsive.fontSize(context, 28),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Icon(
-              Icons.waving_hand,
-              color: AppColors.accentCyan,
-              size: Responsive.fontSize(context, 28),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 20),
-
         Text(
           PortfolioData.bio,
           style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: Responsive.fontSize(context, 16),
-            height: 1.8,
+            fontSize: Responsive.fontSize(context, 15),
+            height: 1.85,
           ),
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 36),
 
-        _buildInfoItem(
-          context,
+        _buildInfoRow(
           icon: Icons.school_outlined,
-          title: "Education",
+          label: "Education",
           value: PortfolioData.education,
         ),
-
-        const SizedBox(height: 16),
-
-        _buildInfoItem(
-          context,
+        const SizedBox(height: 20),
+        _buildInfoRow(
           icon: Icons.location_on_outlined,
-          title: "Location",
+          label: "Location",
           value: PortfolioData.location,
         ),
-
-        const SizedBox(height: 16),
-
-        _buildInfoItem(
-          context,
+        const SizedBox(height: 20),
+        _buildInfoRow(
           icon: Icons.work_outline,
-          title: "Status",
+          label: "Status",
           value: PortfolioData.status,
         ),
       ],
     );
   }
 
-  Widget _buildInfoItem(
-    BuildContext context, {
+  Widget _buildInfoRow({
     required IconData icon,
-    required String title,
+    required String label,
     required String value,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: Colors.white, size: 20),
-        ),
+        Icon(icon, color: AppColors.accent, size: 18),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                label.toUpperCase(),
                 style: TextStyle(
                   color: AppColors.textTertiary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 3),
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.textPrimary,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],
@@ -173,106 +136,87 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCards(BuildContext context) {
+  Widget _buildStatCards(BuildContext context) {
     return Column(
       children: [
-        _buildStatCard(
-          context,
-          icon: Icons.code,
+        _StatCard(
           value: "${PortfolioData.projectsCount}+",
           label: "Projects",
-          gradient: LinearGradient(
-            colors: [
-              AppColors.accentCyan.withOpacity(0.2),
-              AppColors.accentCyan.withOpacity(0.05),
-            ],
-          ),
-          iconColor: AppColors.accentCyan,
+          icon: Icons.code_rounded,
+          accentColor: AppColors.accent,
         ),
-
-        const SizedBox(height: 20),
-
-        _buildStatCard(
-          context,
-          icon: Icons.stars,
+        const SizedBox(height: 16),
+        _StatCard(
           value: "${PortfolioData.skillsCount}+",
-          label: "Skills",
-          gradient: LinearGradient(
-            colors: [
-              AppColors.accentPurple.withOpacity(0.2),
-              AppColors.accentPurple.withOpacity(0.05),
-            ],
-          ),
-          iconColor: AppColors.accentPurple,
+          label: "Technologies",
+          icon: Icons.auto_awesome_rounded,
+          accentColor: AppColors.accentLight,
         ),
-
-        const SizedBox(height: 20),
-
-        _buildStatCard(
-          context,
-          icon: Icons.emoji_events,
-          value: PortfolioData.experience,
+        const SizedBox(height: 16),
+        _StatCard(
+          value: "IT Facilitator",
           label: "Current Role",
-          gradient: LinearGradient(
-            colors: [
-              AppColors.accentPink.withOpacity(0.2),
-              AppColors.accentPink.withOpacity(0.05),
-            ],
-          ),
-          iconColor: AppColors.accentPink,
+          icon: Icons.person_outline_rounded,
+          accentColor: AppColors.accentPink,
         ),
       ],
     );
   }
+}
 
-  Widget _buildStatCard(
-    BuildContext context, {
-    required IconData icon,
-    required String value,
-    required String label,
-    required Gradient gradient,
-    required Color iconColor,
-  }) {
+class _StatCard extends StatelessWidget {
+  final String value;
+  final String label;
+  final IconData icon;
+  final Color accentColor;
+
+  const _StatCard({
+    required this.value,
+    required this.label,
+    required this.icon,
+    required this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(width: 2, color: iconColor.withOpacity(0.3)),
+        color: AppColors.bgCard,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.border, width: 1),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
+              color: accentColor.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: iconColor, size: 32),
+            child: Icon(icon, color: accentColor, size: 20),
           ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                  color: AppColors.textBright,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                  ),
+              ),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.textTertiary,
+                  fontSize: 12,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

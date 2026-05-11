@@ -18,48 +18,41 @@ class _SkillChipState extends State<SkillChip> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      cursor: SystemMouseCursors.basic,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          gradient: _isHovered ? AppColors.cardGradient : null,
-          color: _isHovered ? null : AppColors.bgCard,
-          borderRadius: BorderRadius.circular(12),
+          color: _isHovered
+              ? AppColors.accent.withValues(alpha: 0.08)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            width: 2,
             color: _isHovered
-                ? AppColors.accentCyan.withOpacity(0.5)
-                : Colors.white.withOpacity(0.1),
+                ? AppColors.accent.withValues(alpha: 0.35)
+                : AppColors.border,
+            width: 1,
           ),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: AppColors.accentCyan.withOpacity(0.3),
-                    blurRadius: 15,
-                    spreadRadius: 1,
-                  ),
-                ]
-              : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             FaIcon(
               widget.icon,
-              color: _isHovered
-                  ? AppColors.accentCyan
-                  : AppColors.textSecondary,
-              size: 18,
+              color: _isHovered ? AppColors.accent : AppColors.textTertiary,
+              size: 13,
             ),
             const SizedBox(width: 8),
             Text(
               widget.name,
               style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 15,
-                fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
+                color: _isHovered
+                    ? AppColors.textPrimary
+                    : AppColors.textSecondary,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ],

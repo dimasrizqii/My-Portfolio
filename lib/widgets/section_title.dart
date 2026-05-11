@@ -10,44 +10,45 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Title with gradient
-        ShaderMask(
-          shaderCallback: (bounds) => AppColors.primaryGradient.createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
+        // Small accent label above
+        if (subtitle != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Text(
+              subtitle!.toUpperCase(),
+              style: TextStyle(
+                color: AppColors.accent,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 3,
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
+
+        // Main title — clean white, bold
+        Text(
+          title,
+          style: const TextStyle(
+            color: AppColors.textBright,
+            fontSize: 38,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.8,
+            height: 1.1,
+          ),
+          textAlign: TextAlign.center,
         ),
 
-        if (subtitle != null) ...[
-          const SizedBox(height: 12),
-          Text(
-            subtitle!,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        const SizedBox(height: 20),
 
-        const SizedBox(height: 16),
-
-        // Animated underline
+        // Thin accent underline
         Container(
-          width: 60,
-          height: 4,
+          width: 40,
+          height: 2,
           decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
+            color: AppColors.accent,
+            borderRadius: BorderRadius.circular(1),
           ),
         ),
       ],

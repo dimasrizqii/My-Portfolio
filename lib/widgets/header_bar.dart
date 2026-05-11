@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/responsive.dart';
@@ -24,146 +25,159 @@ class HeaderBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Responsive.spacing(context, 40),
-        vertical: 20,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.bgDark.withOpacity(0.95),
-        border: Border(
-          bottom: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: Responsive.spacing(context, 40),
+            vertical: 20,
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo/Name
-          GestureDetector(
-            onTap: onHomeTap,
-            child: ShaderMask(
-              shaderCallback: (bounds) =>
-                  AppColors.primaryGradient.createShader(
-                    Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+          decoration: BoxDecoration(
+            color: AppColors.bgDark.withValues(alpha: 0.80),
+            border: Border(
+              bottom: BorderSide(color: AppColors.border, width: 1),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Logo
+              GestureDetector(
+                onTap: onHomeTap,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Monogram badge
+                      Container(
+                        width: isMobile ? 30 : 34,
+                        height: isMobile ? 30 : 34,
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryGradient,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'DR',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: isMobile ? 11 : 12,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                      if (!isMobile) ...[
+                        const SizedBox(width: 10),
+                        Text(
+                          'Dimas Rizqi',
+                          style: TextStyle(
+                            color: AppColors.textBright,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-              child: Text(
-                isMobile ? "DR" : "Dimas Rizqi",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: isMobile ? 20 : 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1,
                 ),
               ),
-            ),
-          ),
 
-          // Navigation Links (hide on mobile)
-          if (!isMobile)
-            Row(
-              children: [
-                _HeaderNavButton(
-                  label: "Home",
-                  onTap: onHomeTap,
-                  isActive: activeSection == 'Home',
+              // Navigation links (hidden on mobile)
+              if (!isMobile)
+                Row(
+                  children: [
+                    _NavLink(
+                      label: 'Home',
+                      onTap: onHomeTap,
+                      isActive: activeSection == 'Home',
+                    ),
+                    const SizedBox(width: 36),
+                    _NavLink(
+                      label: 'About',
+                      onTap: onAboutTap,
+                      isActive: activeSection == 'About',
+                    ),
+                    const SizedBox(width: 36),
+                    _NavLink(
+                      label: 'Skills',
+                      onTap: onSkillsTap,
+                      isActive: activeSection == 'Skills',
+                    ),
+                    const SizedBox(width: 36),
+                    _NavLink(
+                      label: 'Projects',
+                      onTap: onProjectsTap,
+                      isActive: activeSection == 'Projects',
+                    ),
+                    const SizedBox(width: 36),
+                    _NavLink(
+                      label: 'Contact',
+                      onTap: onContactTap,
+                      isActive: activeSection == 'Contact',
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                _HeaderNavButton(
-                  label: "About",
-                  onTap: onAboutTap,
-                  isActive: activeSection == 'About',
-                ),
-                const SizedBox(width: 8),
-                _HeaderNavButton(
-                  label: "Skills",
-                  onTap: onSkillsTap,
-                  isActive: activeSection == 'Skills',
-                ),
-                const SizedBox(width: 8),
-                _HeaderNavButton(
-                  label: "Projects",
-                  onTap: onProjectsTap,
-                  isActive: activeSection == 'Projects',
-                ),
-                const SizedBox(width: 8),
-                _HeaderNavButton(
-                  label: "Contact",
-                  onTap: onContactTap,
-                  isActive: activeSection == 'Contact',
-                ),
-              ],
-            ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _HeaderNavButton extends StatefulWidget {
+class _NavLink extends StatefulWidget {
   final String label;
   final VoidCallback onTap;
   final bool isActive;
 
-  const _HeaderNavButton({
+  const _NavLink({
     required this.label,
     required this.onTap,
     this.isActive = false,
   });
 
   @override
-  State<_HeaderNavButton> createState() => _HeaderNavButtonState();
+  State<_NavLink> createState() => _NavLinkState();
 }
 
-class _HeaderNavButtonState extends State<_HeaderNavButton> {
+class _NavLinkState extends State<_NavLink> {
   bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    final isActiveOrHovered = widget.isActive || _isHovered;
+    final Color textColor = widget.isActive
+        ? AppColors.accent
+        : (_isHovered ? AppColors.textBright : AppColors.textPrimary);
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            gradient: isActiveOrHovered ? AppColors.primaryGradient : null,
-            color: isActiveOrHovered ? null : Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: widget.isActive ? 2 : 1,
-              color: widget.isActive
-                  ? AppColors.accentCyan
-                  : (_isHovered
-                        ? AppColors.accentCyan.withOpacity(0.5)
-                        : Colors.white.withOpacity(0.1)),
+            border: Border(
+              bottom: BorderSide(
+                color: widget.isActive ? AppColors.accent : Colors.transparent,
+                width: 1.5,
+              ),
             ),
-            boxShadow: widget.isActive
-                ? [
-                    BoxShadow(
-                      color: AppColors.accentCyan.withOpacity(0.4),
-                      blurRadius: 12,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : null,
           ),
           child: Text(
             widget.label,
             style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 15,
-              fontWeight: isActiveOrHovered ? FontWeight.w600 : FontWeight.w500,
+              color: textColor,
+              fontSize: 14,
+              fontWeight: widget.isActive ? FontWeight.w500 : FontWeight.w400,
+              letterSpacing: 0.1,
             ),
           ),
         ),

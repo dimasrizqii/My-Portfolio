@@ -41,33 +41,36 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedScale(
-        scale: _isHovered ? 1.05 : 1.0,
-        duration: const Duration(milliseconds: 200),
+        scale: _isHovered ? 1.03 : 1.0,
+        duration: const Duration(milliseconds: 180),
         child: GestureDetector(
           onTap: _handlePress,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
             decoration: BoxDecoration(
-              gradient: widget.isPrimary ? AppColors.primaryGradient : null,
-              color: widget.isPrimary ? null : AppColors.bgCard,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                width: 2,
-                color: _isHovered
-                    ? AppColors.accentCyan
-                    : Colors.white.withOpacity(0.1),
-              ),
-              boxShadow: _isHovered
+              color: widget.isPrimary
+                  ? (_isHovered ? AppColors.accentLight : AppColors.accent)
+                  : Colors.white.withValues(alpha: _isHovered ? 0.09 : 0.05),
+              borderRadius: BorderRadius.circular(8),
+              border: widget.isPrimary
+                  ? null
+                  : Border.all(
+                      color: Colors.white.withValues(
+                        alpha: _isHovered ? 0.18 : 0.10,
+                      ),
+                      width: 1,
+                    ),
+              boxShadow: widget.isPrimary && _isHovered
                   ? [
                       BoxShadow(
-                        color: widget.isPrimary
-                            ? AppColors.accentCyan.withOpacity(0.5)
-                            : AppColors.accentPurple.withOpacity(0.3),
-                        blurRadius: 20,
-                        spreadRadius: 2,
+                        color: AppColors.accent.withValues(alpha: 0.40),
+                        blurRadius: 22,
+                        offset: const Offset(0, 6),
                       ),
                     ]
                   : null,
@@ -75,18 +78,19 @@ class _CustomButtonState extends State<CustomButton> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (widget.icon != null) ...[
-                  Icon(widget.icon, color: AppColors.textPrimary, size: 20),
-                  const SizedBox(width: 8),
-                ],
                 Text(
                   widget.text,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: TextStyle(
+                    color: AppColors.textBright,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.1,
                   ),
                 ),
+                if (widget.icon != null) ...[
+                  const SizedBox(width: 8),
+                  Icon(widget.icon, color: AppColors.textBright, size: 17),
+                ],
               ],
             ),
           ),

@@ -23,52 +23,32 @@ class HeroSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      // Exact height = full viewport
       height: Responsive.height(context),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.bgDark,
-            AppColors.bgCard.withOpacity(0.3),
-            AppColors.bgDark,
-          ],
-        ),
-      ),
+      color: AppColors.bgDark,
       child: Stack(
         children: [
-          // Animated background circles
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.accentCyan.withOpacity(0.1),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
+          // Subtle dot-grid background
+          Positioned.fill(
+            child: CustomPaint(painter: _DotGridPainter()),
           ),
+
+          // Soft radial glow from top-center
           Positioned(
-            bottom: -150,
-            left: -150,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.accentPurple.withOpacity(0.1),
-                    Colors.transparent,
-                  ],
+            top: -180,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                width: 700,
+                height: 700,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppColors.accent.withValues(alpha: 0.07),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -80,50 +60,44 @@ class HeroSection extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: Responsive.getMaxWidth(context),
               ),
-              padding: EdgeInsets.only(
-                left: Responsive.spacing(context, 40),
-                right: Responsive.spacing(context, 40),
-                top: 100, // Space for header
-                bottom: 60,
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.spacing(context, 40),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 40),
-                  // Greeting with Icon instead of emoji
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Hello guys",
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: Responsive.fontSize(context, 24),
-                          fontWeight: FontWeight.w500,
-                        ),
+
+                  // Code-tag label
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.accent.withValues(alpha: 0.06),
+                      border: Border.all(
+                        color: AppColors.accent.withValues(alpha: 0.30),
+                        width: 1,
                       ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        Icons.auto_awesome,
-                        color: AppColors.accentCyan,
-                        size: Responsive.fontSize(context, 24),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '< Mobile Developer />',
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        color: AppColors.accent,
+                        fontSize: 12,
+                        letterSpacing: 1.4,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        ", My name is",
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: Responsive.fontSize(context, 24),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 22),
 
-                  // Name with Gradient
+                  // Name with gradient
                   ShaderMask(
                     shaderCallback: (bounds) =>
                         AppColors.primaryGradient.createShader(
@@ -135,50 +109,52 @@ class HeroSection extends StatelessWidget {
                         color: Colors.white,
                         fontSize: Responsive.fontSize(
                           context,
-                          isMobile ? 36 : 56,
+                          isMobile ? 36 : 62,
                         ),
-                        fontWeight: FontWeight.bold,
-                        height: 1.2,
+                        fontWeight: FontWeight.w800,
+                        height: 1.1,
+                        letterSpacing: isMobile ? -1 : -2,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Animated Typing Text
+                  // Animated typing subtitle
                   SizedBox(
-                    height: 60,
+                    height: 36,
                     child: DefaultTextStyle(
                       style: TextStyle(
-                        color: AppColors.accentCyan,
-                        fontSize: Responsive.fontSize(context, 24),
-                        fontWeight: FontWeight.w600,
+                        color: AppColors.textSecondary,
+                        fontSize: Responsive.fontSize(context, 17),
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.3,
                       ),
                       child: AnimatedTextKit(
                         animatedTexts: PortfolioData.typingTexts.map((text) {
                           return TypewriterAnimatedText(
                             text,
-                            speed: const Duration(milliseconds: 100),
+                            speed: const Duration(milliseconds: 80),
                           );
                         }).toList(),
                         repeatForever: true,
-                        pause: const Duration(milliseconds: 1000),
+                        pause: const Duration(milliseconds: 1600),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
-                  // Short Bio
+                  // Short bio
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 600),
+                    constraints: const BoxConstraints(maxWidth: 500),
                     child: Text(
                       "Fresh Graduate passionate about creating beautiful and functional mobile applications with Flutter and Kotlin",
                       style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: Responsive.fontSize(context, 16),
-                        height: 1.6,
+                        color: AppColors.textTertiary,
+                        fontSize: Responsive.fontSize(context, 15),
+                        height: 1.75,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -188,58 +164,45 @@ class HeroSection extends StatelessWidget {
 
                   // CTA Buttons
                   Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
+                    spacing: 14,
+                    runSpacing: 14,
                     alignment: WrapAlignment.center,
                     children: [
                       CustomButton(
                         text: "View Projects",
                         onPressed: onProjectsPressed,
                         isPrimary: true,
-                        icon: Icons.rocket_launch,
+                        icon: Icons.arrow_forward_rounded,
                       ),
                       CustomButton(
                         text: "Contact Me",
                         onPressed: onContactPressed,
                         isPrimary: false,
-                        icon: Icons.email_outlined,
+                        icon: Icons.mail_outline_rounded,
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 72),
 
-                  // Clickable Scroll Indicator
+                  // Scroll indicator
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: onScrollDown,
                       child: Column(
                         children: [
-                          const Text(
-                            "Scroll to explore",
+                          Text(
+                            'SCROLL',
                             style: TextStyle(
                               color: AppColors.textTertiary,
-                              fontSize: 14,
+                              fontSize: 10,
+                              letterSpacing: 2.5,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0, end: 10),
-                            duration: const Duration(milliseconds: 800),
-                            curve: Curves.easeInOut,
-                            builder: (context, double value, child) {
-                              return Transform.translate(
-                                offset: Offset(0, value),
-                                child: const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: AppColors.accentCyan,
-                                  size: 32,
-                                ),
-                              );
-                            },
-                            onEnd: () {},
-                          ),
+                          _BouncingArrow(),
                         ],
                       ),
                     ),
@@ -249,6 +212,68 @@ class HeroSection extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DotGridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.032)
+      ..strokeCap = StrokeCap.round;
+    const spacing = 38.0;
+    for (double x = spacing; x < size.width; x += spacing) {
+      for (double y = spacing; y < size.height; y += spacing) {
+        canvas.drawCircle(Offset(x, y), 1.1, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DotGridPainter old) => false;
+}
+
+class _BouncingArrow extends StatefulWidget {
+  @override
+  State<_BouncingArrow> createState() => _BouncingArrowState();
+}
+
+class _BouncingArrowState extends State<_BouncingArrow>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _anim;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _anim = Tween<double>(begin: 0, end: 7).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _anim,
+      builder: (_, child) => Transform.translate(
+        offset: Offset(0, _anim.value),
+        child: Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: AppColors.accent.withValues(alpha: 0.6),
+          size: 24,
+        ),
       ),
     );
   }

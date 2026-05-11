@@ -16,69 +16,28 @@ class SkillsSection extends StatelessWidget {
         horizontal: Responsive.spacing(context, 40),
         vertical: Responsive.spacing(context, 100),
       ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.bgDark,
-            AppColors.bgCard.withOpacity(0.3),
-            AppColors.bgDark,
-          ],
-        ),
-      ),
+      color: AppColors.bgCard,
       child: Center(
         child: Container(
-          constraints: BoxConstraints(
-            maxWidth: Responsive.getMaxWidth(context),
-          ),
+          constraints: BoxConstraints(maxWidth: Responsive.getMaxWidth(context)),
           child: Column(
             children: [
               const SectionTitle(
                 title: "Skills & Technologies",
-                subtitle: "Technologies I work with",
+                subtitle: "What I Work With",
               ),
 
-              const SizedBox(height: 60),
+              const SizedBox(height: 64),
 
-              // Skills by Category
-              _buildSkillCategory(
-                context,
-                category: "Mobile",
-                color: AppColors.accentCyan,
-              ),
-
+              _buildCategory(context, "Mobile", AppColors.accent),
               const SizedBox(height: 40),
-
-              _buildSkillCategory(
-                context,
-                category: "Frontend",
-                color: AppColors.accentPurple,
-              ),
-
+              _buildCategory(context, "Frontend", AppColors.accentLight),
               const SizedBox(height: 40),
-
-              _buildSkillCategory(
-                context,
-                category: "Backend",
-                color: AppColors.accentPink,
-              ),
-
+              _buildCategory(context, "Backend", AppColors.accentPink),
               const SizedBox(height: 40),
-
-              _buildSkillCategory(
-                context,
-                category: "Tools",
-                color: AppColors.gradientMiddle,
-              ),
-
+              _buildCategory(context, "Tools", AppColors.textSecondary),
               const SizedBox(height: 40),
-
-              _buildSkillCategory(
-                context,
-                category: "Soft Skills",
-                color: AppColors.success,
-              ),
+              _buildCategory(context, "Soft Skills", AppColors.success),
             ],
           ),
         ),
@@ -86,13 +45,9 @@ class SkillsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSkillCategory(
-    BuildContext context, {
-    required String category,
-    required Color color,
-  }) {
+  Widget _buildCategory(BuildContext context, String category, Color color) {
     final skills = PortfolioSkills.skills
-        .where((skill) => skill.category == category)
+        .where((s) => s.category == category)
         .toList();
 
     if (skills.isEmpty) return const SizedBox.shrink();
@@ -100,37 +55,33 @@ class SkillsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Category Title
+        // Category label — small caps with leading dash
         Row(
           children: [
-            Container(
-              width: 4,
-              height: 24,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(width: 12),
+            Container(width: 20, height: 1, color: color),
+            const SizedBox(width: 10),
             Text(
-              category,
+              category.toUpperCase(),
               style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+                color: color,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 2.5,
               ),
             ),
           ],
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
-        // Skills
         Wrap(
-          spacing: 12,
-          runSpacing: 12,
+          spacing: 10,
+          runSpacing: 10,
           children: skills.map((skill) {
-            return SkillChip(name: skill.name, icon: skill.icon as IconData);
+            return SkillChip(
+              name: skill.name,
+              icon: skill.icon as IconData,
+            );
           }).toList(),
         ),
       ],

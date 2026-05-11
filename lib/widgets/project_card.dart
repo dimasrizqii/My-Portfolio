@@ -17,20 +17,11 @@ class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
 
   Future<void> _launchUrl(String url) async {
-    print('🔗 Attempting to open URL: $url');
     final uri = Uri.parse(url);
     try {
-      print('🚀 Launching with platformDefault mode...');
       await launchUrl(uri, mode: LaunchMode.platformDefault);
-      print('✅ URL launched successfully!');
     } catch (e) {
-      print('⚠️ platformDefault failed, trying webOnlyWindowName...');
-      try {
-        await launchUrl(uri, webOnlyWindowName: '_blank');
-        print('✅ URL launched with _blank!');
-      } catch (e2) {
-        print('❌ Failed to launch URL: $e2');
-      }
+      await launchUrl(uri, webOnlyWindowName: '_blank');
     }
   }
 
@@ -40,133 +31,121 @@ class _ProjectCardState extends State<ProjectCard> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
+        duration: const Duration(milliseconds: 250),
+        transform: Matrix4.translationValues(0, _isHovered ? -6 : 0, 0),
         child: Container(
-          height: 320,
           decoration: BoxDecoration(
-            gradient: AppColors.cardGradient,
-            borderRadius: BorderRadius.circular(16),
+            color: AppColors.bgCard,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              width: 2,
-              color: _isHovered
-                  ? AppColors.accentCyan.withOpacity(0.5)
-                  : Colors.white.withOpacity(0.1),
+              color: _isHovered ? AppColors.borderHover : AppColors.border,
+              width: 1,
             ),
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: AppColors.accentCyan.withOpacity(0.3),
-                      blurRadius: 20,
-                      spreadRadius: 2,
+                      color: Colors.black.withValues(alpha: 0.35),
+                      blurRadius: 32,
+                      offset: const Offset(0, 12),
                     ),
                   ]
-                : [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                    ),
-                  ],
+                : null,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(14),
-            child: Stack(
+            borderRadius: BorderRadius.circular(11),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Content
-                Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Project Name
-                      Text(
-                        widget.project.name,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Description
-                      Expanded(
-                        child: Text(
-                          widget.project.description,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 14,
-                            height: 1.5,
-                          ),
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Technologies
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: widget.project.technologies.map((tech) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.accentCyan.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: AppColors.accentCyan.withOpacity(0.3),
-                              ),
-                            ),
-                            child: Text(
-                              tech,
-                              style: const TextStyle(
-                                color: AppColors.accentCyan,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // GitHub Link
-                      if (widget.project.githubUrl != null)
-                        _GitHubButton(
-                          url: widget.project.githubUrl!,
-                          onTap: () => _launchUrl(widget.project.githubUrl!),
-                        ),
-                    ],
+                // Top accent bar (appears on hover)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  height: 2,
+                  decoration: BoxDecoration(
+                    gradient: _isHovered ? AppColors.primaryGradient : null,
+                    color: _isHovered ? null : Colors.transparent,
                   ),
                 ),
 
-                // Gradient Overlay on Hover (doesn't block clicks)
-                if (_isHovered)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.gradientStart.withOpacity(0.1),
-                              AppColors.gradientEnd.withOpacity(0.1),
-                            ],
+                // Card content
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Folder icon + GitHub link row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              Icons.folder_outlined,
+                              color: AppColors.accent,
+                              size: 28,
+                            ),
+                            if (widget.project.githubUrl != null)
+                              _IconLink(
+                                icon: FontAwesomeIcons.github,
+                                url: widget.project.githubUrl!,
+                                onTap: () =>
+                                    _launchUrl(widget.project.githubUrl!),
+                              ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Project name
+                        Text(
+                          widget.project.name,
+                          style: const TextStyle(
+                            color: AppColors.textBright,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.3,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // Description
+                        Expanded(
+                          child: Text(
+                            widget.project.description,
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 13,
+                              height: 1.6,
+                            ),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
+
+                        const SizedBox(height: 16),
+
+                        // Tech stack
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: widget.project.technologies.map((tech) {
+                            return Text(
+                              tech,
+                              style: TextStyle(
+                                color: AppColors.accent,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'monospace',
+                                letterSpacing: 0.3,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
                   ),
+                ),
               ],
             ),
           ),
@@ -176,17 +155,18 @@ class _ProjectCardState extends State<ProjectCard> {
   }
 }
 
-class _GitHubButton extends StatefulWidget {
+class _IconLink extends StatefulWidget {
+  final IconData icon;
   final String url;
   final VoidCallback onTap;
 
-  const _GitHubButton({required this.url, required this.onTap});
+  const _IconLink({required this.icon, required this.url, required this.onTap});
 
   @override
-  State<_GitHubButton> createState() => _GitHubButtonState();
+  State<_IconLink> createState() => _IconLinkState();
 }
 
-class _GitHubButtonState extends State<_GitHubButton> {
+class _IconLinkState extends State<_IconLink> {
   bool _isHovered = false;
 
   @override
@@ -196,51 +176,20 @@ class _GitHubButtonState extends State<_GitHubButton> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
-        onTap: () {
-          print('🖱️ GitHub button clicked!');
-          widget.onTap();
-        },
+        onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.all(7),
           decoration: BoxDecoration(
-            gradient: _isHovered ? AppColors.primaryGradient : null,
-            color: _isHovered ? null : Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: _isHovered ? 2 : 1,
-              color: _isHovered
-                  ? AppColors.accentCyan
-                  : Colors.white.withOpacity(0.2),
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: AppColors.accentCyan.withOpacity(0.4),
-                      blurRadius: 12,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : null,
+            color: _isHovered
+                ? AppColors.accent.withValues(alpha: 0.12)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FaIcon(
-                FontAwesomeIcons.github,
-                color: AppColors.textPrimary,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'View on GitHub',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 13,
-                  fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
-                ),
-              ),
-            ],
+          child: FaIcon(
+            widget.icon,
+            color: _isHovered ? AppColors.accent : AppColors.textSecondary,
+            size: 16,
           ),
         ),
       ),
